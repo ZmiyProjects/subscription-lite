@@ -37,13 +37,49 @@
 # Основные методы API
 
 - POST /api/editors - добавить новое издательство
-- GET /api/editors - получить список издательств
-- GET /api/editors/<id> - получить конкретное издательство и список доступные подписок (журналов)
 
-- POST /api/editor/<id>/journals - довавить новый журнал конкретному издательству
-- GET /api/journals/<id> - получить конкретный журнал
+```bash
+curl --header "Content-Type: application/json" --request POST --data '{"editor_name": "Дачная пресса"}' http://127.0.0.1:8080/api/editors/
+```
+
+- GET /api/editors - получить список издательств
+
+```bash
+curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/editors/
+```
+
+- GET /api/editors/$id - получить конкретное издательство и список доступные подписок (журналов)
+
+```bash
+curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/editors/1/
+```
+
+- POST /api/editors/$id/journals - добавить новый журнал конкретному издательству
+
+```bash
+curl --header "Content-Type: application/json" --request POST --data '{"journal_name": "Рыбалка", "price": 100}' http://127.0.0.1:8080/api/editors/1/journals/
+```
+
+- GET /api/journals/$id - получить конкретный журнал
+
+```bash
+curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/journals/1/
+```
 
 - POST /api/customers - добавить нового пользователя
-- POST /api/customers/<id>/subscriptions - добавить пользователю новую подписку
-- GET /api/customers/<id> - получить конкретного пользователя и его подписки
 
+```bash
+curl --header "Content-Type: application/json" --request POST --data '{"first_name": "Иванов", "second_name": "Иван", "address": "г. Москва, Ленинский проспект", "birth_date": "1990-10-25"}' http://127.0.0.1:8080/api/customers/
+```
+
+- POST /api/customers/$id/subscriptions - добавить пользователю новую подписку
+
+```bash
+curl --header "Content-Type: application/json" --request POST --data '{"journal": 4}' http://127.0.0.1:8080/api/customers/1/subscriptions/
+```
+
+- GET /api/customers/$id - получить конкретного пользователя и его подписки
+
+```bash
+curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/customers/1/
+```
