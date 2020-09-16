@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from rest_framework.routers import DefaultRouter
 
-from api.api.endpoints import EditorViewSet, EditorWithJournalsViewSet, JournalViewSet, CustomerViewSet
+from api.api.endpoints import EditorWithJournalsViewSet, JournalViewSet, CustomerViewSet
 
 
 api_router = DefaultRouter()

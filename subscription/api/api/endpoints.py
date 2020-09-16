@@ -38,38 +38,23 @@ class CustomerViewSet(GenericViewSet, CreateModelMixin, RetrieveAPIView, UpdateM
 class JournalViewSet(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
     queryset = Journal.objects.all()
     serializer_class = JournalSerializer
-    #
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     return Response({'id': serializer.data["id"]}, status=status.HTTP_201_CREATED)
-
-
-class EditorViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
-    queryset = Editor.objects.all()
-    serializer_class = EditorSerializer
-
-
-class PartialEditorViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
-    queryset = Editor.objects.all()
-    serializer_class = EditorPartialSerializer
 
 
 class EditorWithJournalsViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin):
     queryset = Editor.objects.all()
-    serializer_class = EditorWithJournalsSerializer
+    # serializer_class = EditorWithJournalsSerializer
 
     def get_serializer_class(self):
         if self.action == 'list':
             return EditorSerializer
-        if self.action == 'retrieve':
-            return EditorWithJournalsSerializer
-        if self.action == 'create':
+        elif self.action == 'retrieve':
+            return EditorSerializer
+        elif self.action == 'create':
             return EditorPartialSerializer
-        return EditorWithJournalsSerializer
+        return EditorPartialSerializer
 
     def create(self, request, *args, **kwargs):
+        """Добавляет издателю новый журнал и увеличивает количество изданных (journals_count) на 1"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -90,6 +75,10 @@ class EditorWithJournalsViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
             return Response({'id': JournalSerializer(journal).data["id"]})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @add_journal.mapping.get
+    def get_journals(self, request, pk=None):
+        return Response(EditorWithJournalsSerializer(Editor.objects.get(id=pk)).data, status.HTTP_200_OK)
 
 
 class EditorListView(ListAPIView):

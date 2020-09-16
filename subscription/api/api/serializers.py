@@ -47,7 +47,7 @@ class EditorWithJournalsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Editor
-        fields = '__all__'
+        fields = ['id', 'editor_name', 'journals']
 
 
 class JournalSerializer(serializers.ModelSerializer):
