@@ -41,6 +41,7 @@
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"editor_name": "Дачная пресса"}' http://127.0.0.1:8080/api/editors/
 ```
+Ответ - id нового издательства
 
 - GET /api/editors - получить список издательств
 
@@ -59,6 +60,7 @@ curl --header "Content-Type: application/json" --request GET http://127.0.0.1:80
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"journal_name": "Рыбалка", "price": 100}' http://127.0.0.1:8080/api/editors/1/journals/
 ```
+Ответ - id нового журнала
 
 - GET /api/journals/$id - получить конкретный журнал
 
@@ -71,6 +73,14 @@ curl --header "Content-Type: application/json" --request GET http://127.0.0.1:80
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"first_name": "Иванов", "second_name": "Иван", "address": "г. Москва, Ленинский проспект", "birth_date": "1990-10-25"}' http://127.0.0.1:8080/api/customers/
 ```
+Ответ - id нового пользователя
+
+- PATCH /api/customers/$id/ - обновить сведения о пользователе
+
+```bash
+curl --header "Content-Type: application/json" --request PATCH --data '{"address": "г. Москва, Ленинский проспект, дом 2к10"}' http://127.0.0.1:8080/api/customers/1/
+```
+Ответ - структура с новым состоянием пользователя
 
 - POST /api/customers/$id/subscriptions - добавить пользователю новую подписку
 

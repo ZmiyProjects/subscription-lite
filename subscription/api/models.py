@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 class Editor(models.Model):
     editor_name = models.CharField(max_length=100, unique=True, null=False)
+    journals_count = models.IntegerField(null=False, default=0)
 
     def __str__(self):
         return self.editor_name
@@ -24,6 +25,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=255, null=False)
     birth_date = models.DateField(null=False)
     registration_date = models.DateField(null=False, auto_now_add=True)
+    subscription_count = models.IntegerField(null=False, default=0)
 
     def __str__(self):
         return f"{self.first_name} {self.second_name}"

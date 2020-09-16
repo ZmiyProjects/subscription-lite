@@ -1,0 +1,16 @@
+[
+  {
+    "model": "api.editor",
+    "pk": 1,
+    "fields": {
+      "editor_name": "Тайная пресса"
+    }
+  },
+  {
+    "model": "api.editor",
+    "pk": 2,
+    "fields": {
+      "editor_name": "Альфа"
+    }
+  }
+]
