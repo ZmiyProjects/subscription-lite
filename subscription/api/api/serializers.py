@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from ..models import Editor, Journal, Customer, Subscription
+from django.db import models
+
 
 from datetime import date
 
@@ -51,7 +53,7 @@ class EditorWithJournalsSerializer(serializers.ModelSerializer):
 
 
 class JournalSerializer(serializers.ModelSerializer):
-    editor = EditorSerializer(many=False, read_only=True)
+    editor = EditorPartialSerializer(many=False, read_only=True)
 
     class Meta:
         model = Journal
@@ -79,8 +81,20 @@ class CustomerSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Customer mast be 18+!")
         return attrs
 
+    class Meta:
+        model = Customer
+        fields = ['id', 'first_name', 'second_name', 'address', 'birth_date', 'registration_date']
+
+
+class CustomerFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
+
+class CustomerSubscriptionsSerializer(serializers.ModelSerializer):
     subscriptions = SubscriptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Customer
-        fields = '__all__'
+        fields = ['id', 'subscriptions']

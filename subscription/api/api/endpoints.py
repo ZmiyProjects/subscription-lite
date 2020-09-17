@@ -1,7 +1,7 @@
 from ..api.serializers import (EditorSerializer, JournalSerializer,
                                EditorWithJournalsSerializer, JournalPartialSerializer,
                                CustomerSerializer, SubscriptionSerializer, SubscriptionOnlySerializer,
-                               EditorPartialSerializer)
+                               EditorPartialSerializer, CustomerFullSerializer, CustomerSubscriptionsSerializer)
 from ..models import Editor, Journal, Customer, Subscription
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.viewsets import GenericViewSet
@@ -15,7 +15,17 @@ from django.db.transaction import atomic
 
 class CustomerViewSet(GenericViewSet, CreateModelMixin, RetrieveAPIView, UpdateModelMixin):
     queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+    serializer_class = CustomerFullSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CustomerFullSerializer
+        elif self.action == 'create':
+            return CustomerSerializer
+        return CustomerSerializer
+
+    def list(self, request, *args, **kwargs):
+        return Response({"error": "Не поддерживается"}, status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -23,16 +33,28 @@ class CustomerViewSet(GenericViewSet, CreateModelMixin, RetrieveAPIView, UpdateM
         self.perform_create(serializer)
         return Response({'id': serializer.data["id"]}, status=status.HTTP_201_CREATED)
 
+    @atomic
     @action(methods=['post'], detail=True, url_path='subscriptions')
     def add_subscription(self, request, pk=None):
         request.data["customer"] = pk
         serializer = SubscriptionOnlySerializer(data=request.data)
         if serializer.is_valid():
             subscription = Subscription(journal_id=serializer.data['journal'], customer_id=pk)
+            c = Customer.objects.get(id=pk)
+            c.subscription_count += 1
             subscription.save()
-            return Response(SubscriptionSerializer(subscription).data, status.HTTP_201_CREATED)
+            c.save()
+            serialized = SubscriptionSerializer(subscription).data
+            return Response({
+                serialized['start_date'],
+                serialized['end_date']
+            }, status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @add_subscription.mapping.get
+    def get_subscription(self, request, pk=None):
+        return Response(CustomerSubscriptionsSerializer(Customer.objects.get(id=pk)).data, status.HTTP_200_OK)
 
 
 class JournalViewSet(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
@@ -40,7 +62,8 @@ class JournalViewSet(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
     serializer_class = JournalSerializer
 
 
-class EditorWithJournalsViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin, CreateModelMixin, DestroyModelMixin):
+class EditorWithJournalsViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin,
+                                CreateModelMixin, DestroyModelMixin):
     queryset = Editor.objects.all()
     # serializer_class = EditorWithJournalsSerializer
 
