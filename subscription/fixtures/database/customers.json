@@ -1,0 +1,27 @@
+[
+  {
+    "model": "api.customer",
+    "pk": 1,
+    "fields": {
+      "first_name": "Иванов",
+      "second_name": "Иван",
+      "address": "г. Москва, Ленинский проспект",
+      "birth_date": "1990-10-25",
+      "registration_date": "2020-01-01",
+      "subscription_count": 2
+    }
+  },
+  {
+    "model": "api.customer",
+    "pk": 2,
+    "fields": {
+      "first_name": "Петр",
+      "second_name": "Петров",
+      "address": "г. Москва, Пролетарская улица",
+      "birth_date": "1974-03-20",
+      "registration_date": "2020-05-29",
+      "subscription_count": 2
+    }
+  }
+]
+

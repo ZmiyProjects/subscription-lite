@@ -43,32 +43,32 @@ curl --header "Content-Type: application/json" --request POST --data '{"editor_n
 ```
 Ответ - id нового издательства
 
-- GET /api/editors - получить список издательств
+- GET /api/editors/ - получить список издательств
 
 ```bash
 curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/editors/
 ```
 
-- GET /api/editors/$id - получить конкретное издательство и список доступные подписок (журналов)
+- GET /api/editors/$id/ - получить конкретное издательство и список доступные подписок (журналов)
 
 ```bash
 curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/editors/1/
 ```
 
-- POST /api/editors/$id/journals - добавить новый журнал конкретному издательству
+- POST /api/editors/$id/journals/ - добавить новый журнал конкретному издательству
 
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"journal_name": "Рыбалка", "price": 100}' http://127.0.0.1:8080/api/editors/1/journals/
 ```
 Ответ - id нового журнала
 
-- GET /api/journals/$id - получить конкретный журнал
+- GET /api/journals/$id/ - получить конкретный журнал
 
 ```bash
 curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/journals/1/
 ```
 
-- POST /api/customers - добавить нового пользователя
+- POST /api/customers/ - добавить нового пользователя
 
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"first_name": "Иванов", "second_name": "Иван", "address": "г. Москва, Ленинский проспект", "birth_date": "1990-10-25"}' http://127.0.0.1:8080/api/customers/
@@ -82,14 +82,26 @@ curl --header "Content-Type: application/json" --request PATCH --data '{"address
 ```
 Ответ - структура с новым состоянием пользователя
 
-- POST /api/customers/$id/subscriptions - добавить пользователю новую подписку
+- POST /api/customers/$id/subscriptions/ - добавить пользователю новую подписку
 
 ```bash
 curl --header "Content-Type: application/json" --request POST --data '{"journal": 4}' http://127.0.0.1:8080/api/customers/1/subscriptions/
 ```
 
-- GET /api/customers/$id - получить конкретного пользователя и его подписки
+- GET /api/customers/$id/ - получить конкретного пользователя
 
 ```bash
 curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/customers/1/
+```
+
+- GET /api/customers/$id/subscriptions/ - получить конкретного пользователя и его подписки
+
+```bash
+curl --header "Content-Type: application/json" --request GET http://127.0.0.1:8080/api/customers/1/subscriptions/
+```
+
+- DELETE /api/customers/$id/subscriptions/ Отменить подписку для конкретного пользователя
+
+```bash
+curl --header "Content-Type: application/json" --request DELETE --data '{"journal": 4}' http://127.0.0.1:8080/api/customers/1/subscriptions/
 ```

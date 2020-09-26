@@ -1,0 +1,42 @@
+[
+  {
+    "model": "api.subscription",
+    "pk": 1,
+    "fields": {
+        "journal": 1,
+        "customer": 1,
+        "start_date": "2020-09-01",
+        "end_date": "2021-09-01"
+    }
+  },
+  {
+    "model": "api.subscription",
+    "pk": 2,
+    "fields": {
+        "journal": 2,
+        "customer": 1,
+        "start_date": "2020-09-01",
+        "end_date": "2021-09-01"
+    }
+  },
+  {
+    "model": "api.subscription",
+    "pk": 3,
+    "fields": {
+        "journal": 1,
+        "customer": 2,
+        "start_date": "2020-09-01",
+        "end_date": "2021-09-01"
+    }
+  },
+  {
+    "model": "api.subscription",
+    "pk": 4,
+    "fields": {
+        "journal": 3,
+        "customer": 2,
+        "start_date": "2020-09-01",
+        "end_date": "2021-09-01"
+    }
+  }
+]

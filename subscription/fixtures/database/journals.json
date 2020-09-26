@@ -1,0 +1,29 @@
+[
+  {
+    "model": "api.journal",
+    "pk": 1,
+    "fields": {
+      "editor": 1,
+      "journal_name": "Рыбалка",
+      "price": 100
+    }
+  },
+  {
+    "model": "api.journal",
+    "pk": 2,
+    "fields": {
+      "editor": 1,
+      "journal_name": "Наука",
+      "price": 400
+    }
+  },
+  {
+    "model": "api.journal",
+    "pk": 3,
+    "fields": {
+      "editor": 2,
+      "journal_name": "Техника",
+      "price": 10
+    }
+  }
+]

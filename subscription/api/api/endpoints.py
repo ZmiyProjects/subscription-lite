@@ -46,8 +46,10 @@ class CustomerViewSet(GenericViewSet, CreateModelMixin, RetrieveAPIView, UpdateM
             c.save()
             serialized = SubscriptionSerializer(subscription).data
             return Response({
-                serialized['start_date'],
-                serialized['end_date']
+                "start_date": serialized['start_date'],
+                "end_date": serialized['end_date'],
+                "journal_id": serialized['journal']['id'],
+                "customer_id": int(pk)
             }, status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -55,6 +57,24 @@ class CustomerViewSet(GenericViewSet, CreateModelMixin, RetrieveAPIView, UpdateM
     @add_subscription.mapping.get
     def get_subscription(self, request, pk=None):
         return Response(CustomerSubscriptionsSerializer(Customer.objects.get(id=pk)).data, status.HTTP_200_OK)
+
+    @atomic
+    @add_subscription.mapping.delete
+    def delete_subscription(self, request, pk=None):
+        journal_id = request.data.get("journal")
+        if journal_id is None:
+            return Response({"error": "не указано id удаляемого журнала!"}, status.HTTP_400_BAD_REQUEST)
+        c = Customer.objects.get(id=pk)
+        if c.subscription_count == 0:
+            return Response({"error": "У пользователя нет активных подписок!"}, status.HTTP_400_BAD_REQUEST)
+        Subscription.objects.filter(journal=journal_id, customer=pk).delete()
+        c.subscription_count -= 1
+        c.save()
+        serializer = CustomerFullSerializer(c).data
+        return Response({
+            "customer_id": serializer["id"],
+            "subscription_count": serializer["subscription_count"]
+        }, status.HTTP_200_OK)
 
 
 class JournalViewSet(GenericViewSet, RetrieveModelMixin, CreateModelMixin):
@@ -95,7 +115,7 @@ class EditorWithJournalsViewSet(GenericViewSet, ListModelMixin, RetrieveModelMix
             o.journals_count += 1
             journal.save()
             o.save()
-            return Response({'id': JournalSerializer(journal).data["id"]})
+            return Response({'id': JournalSerializer(journal).data["id"]}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -3,14 +3,16 @@
     "model": "api.editor",
     "pk": 1,
     "fields": {
-      "editor_name": "Тайная пресса"
+      "editor_name": "Тайная пресса",
+      "journals_count": 2
     }
   },
   {
     "model": "api.editor",
     "pk": 2,
     "fields": {
-      "editor_name": "Альфа"
+      "editor_name": "Альфа",
+      "journals_count": 1
     }
   }
 ]
