@@ -1,5 +1,26 @@
 # Веб-сервис предоставляющий API для учета подписки на периодические печатные издания
 
+# Запуск
+
+```bash
+docker-compose up --build -d
+```
+
+```bash
+docker-compose up -d
+```
+
+# Запуск тестов
+
+Зайти в контейнер:
+```bash
+docker-compose run code bash
+```
+Затем выполнить:
+```bash
+cd subscription/ && ./manage.py test
+```
+
 # Основные сущности
 
 ## Editor
